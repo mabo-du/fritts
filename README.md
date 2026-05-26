@@ -1,6 +1,6 @@
 # Fritts — Dendrochronology Analysis Platform
 
-![Fritts Screenshot](assets/screenshot.png)
+![Fritts Screenshot](assets/fritts.png)
 
 An open-source desktop tool for tree-ring cross-dating, measurement, and master chronology building. Built with Python, PyQt6, and PyQtGraph. Named in honor of Harold C. Fritts, a pioneer of dendroclimatology.
 
