@@ -1,0 +1,12 @@
+Project: 21. Dendrochronology-Analysis-Platform
+Source: Identified Gap Addition
+======================================================================
+
+CONTEXT:
+I am building a free, open-source tool for Dendrochronology Analysis Platform to fill a critical gap in the archaeological open-source ecosystem.
+
+──────────────────────────────────────────────────────────────────────
+
+RESEARCH PROMPT 6:
+
+**UI for Visual Cross-matching**: What are the best UX patterns for visually aligning and editing extremely long time-series data (tree-ring curves)? How can a UI handle zooming, panning, and adding/removing phantom rings interactively?

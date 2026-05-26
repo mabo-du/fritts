@@ -1,0 +1,12 @@
+Project: 21. Dendrochronology-Analysis-Platform
+Source: Identified Gap Addition
+======================================================================
+
+CONTEXT:
+I am building a free, open-source tool for Dendrochronology Analysis Platform to fill a critical gap in the archaeological open-source ecosystem.
+
+──────────────────────────────────────────────────────────────────────
+
+RESEARCH PROMPT 4:
+
+**Existing Dendrochronology Software**: What software is currently used in dendrochronology labs (e.g., TSAP-Win, CooRecorder, CDendro, dplR)? What are the primary pain points for archaeologists using these tools?

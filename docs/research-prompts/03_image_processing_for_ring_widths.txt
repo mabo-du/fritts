@@ -1,0 +1,12 @@
+Project: 21. Dendrochronology-Analysis-Platform
+Source: Identified Gap Addition
+======================================================================
+
+CONTEXT:
+I am building a free, open-source tool for Dendrochronology Analysis Platform to fill a critical gap in the archaeological open-source ecosystem.
+
+──────────────────────────────────────────────────────────────────────
+
+RESEARCH PROMPT 3:
+
+**Image Processing for Ring Widths**: What computer vision techniques can be used to automatically or semi-automatically detect and measure tree-ring boundaries from high-resolution scans of wood cores or slices?

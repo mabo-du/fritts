@@ -1,0 +1,12 @@
+Project: 21. Dendrochronology-Analysis-Platform
+Source: Identified Gap Addition
+======================================================================
+
+CONTEXT:
+I am building a free, open-source tool for Dendrochronology Analysis Platform to fill a critical gap in the archaeological open-source ecosystem.
+
+──────────────────────────────────────────────────────────────────────
+
+RESEARCH PROMPT 2:
+
+**Cross-dating Algorithms**: What statistical algorithms are used to cross-match tree-ring width sequences against master chronologies? Explain the mathematics behind the t-value (Baillie-Pilcher and Hollstein variants) and Gleichläufigkeit (Coefficient of Parallel Variation).

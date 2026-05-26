@@ -1,0 +1,26 @@
+I am building an open-source desktop tool for tree-ring cross-dating, measurement, and master chronology building. Existing software is often dated, proprietary, or lacks a modern visual interface.
+
+RESEARCH PROMPT 1:
+
+**Tree-Ring Data Formats**: What are the standard formats for dendrochronology data (e.g., Tucson decadal format, Heidelberg format, TRiDaS)? How does the TRiDaS (Tree Ring Data Standard) schema structure metadata for archaeological timber?
+
+RESEARCH PROMPT 2:
+
+**Cross-dating Algorithms**: What statistical algorithms are used to cross-match tree-ring width sequences against master chronologies? Explain the mathematics behind the t-value (Baillie-Pilcher and Hollstein variants) and Gleichläufigkeit (Coefficient of Parallel Variation).
+
+RESEARCH PROMPT 3:
+
+**Image Processing for Ring Widths**: What computer vision techniques can be used to automatically or semi-automatically detect and measure tree-ring boundaries from high-resolution scans of wood cores or slices?
+
+RESEARCH PROMPT 4:
+
+**Existing Dendrochronology Software**: What software is currently used in dendrochronology labs (e.g., TSAP-Win, CooRecorder, CDendro, dplR)? What are the primary pain points for archaeologists using these tools?
+
+RESEARCH PROMPT 5:
+
+**Master Chronology Databases**: Where are master regional tree-ring chronologies hosted (e.g., ITRDB)? Does the International Tree-Ring Data Bank provide APIs for programmatic access and querying?
+
+
+RESEARCH PROMPT 6:
+
+**UI for Visual Cross-matching**: What are the best UX patterns for visually aligning and editing extremely long time-series data (tree-ring curves)? How can a UI handle zooming, panning, and adding/removing phantom rings interactively?

@@ -1,0 +1,12 @@
+Project: 21. Dendrochronology-Analysis-Platform
+Source: Identified Gap Addition
+======================================================================
+
+CONTEXT:
+I am building a free, open-source tool for Dendrochronology Analysis Platform to fill a critical gap in the archaeological open-source ecosystem.
+
+──────────────────────────────────────────────────────────────────────
+
+RESEARCH PROMPT 1:
+
+**Tree-Ring Data Formats**: What are the standard formats for dendrochronology data (e.g., Tucson decadal format, Heidelberg format, TRiDaS)? How does the TRiDaS (Tree Ring Data Standard) schema structure metadata for archaeological timber?

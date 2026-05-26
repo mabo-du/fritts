@@ -1,0 +1,12 @@
+Project: 21. Dendrochronology-Analysis-Platform
+Source: Identified Gap Addition
+======================================================================
+
+CONTEXT:
+I am building a free, open-source tool for Dendrochronology Analysis Platform to fill a critical gap in the archaeological open-source ecosystem.
+
+──────────────────────────────────────────────────────────────────────
+
+RESEARCH PROMPT 5:
+
+**Master Chronology Databases**: Where are master regional tree-ring chronologies hosted (e.g., ITRDB)? Does the International Tree-Ring Data Bank provide APIs for programmatic access and querying?
