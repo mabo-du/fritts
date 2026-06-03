@@ -92,6 +92,7 @@ class ITRDBDialog(QDialog):
         self._search_input.returnPressed.connect(self._on_search)
         
         self._search_btn = QPushButton("Search API")
+        self._search_btn.setDefault(True)
         self._search_btn.clicked.connect(self._on_search)
         
         search_layout.addWidget(self._search_input)
@@ -134,6 +135,7 @@ class ITRDBDialog(QDialog):
         self._download_btn.setEnabled(False)
         
         self._close_btn = QPushButton("Close")
+        self._close_btn.setAutoDefault(False)
         self._close_btn.clicked.connect(self.reject)
         
         btn_layout.addStretch()
@@ -168,6 +170,10 @@ class ITRDBDialog(QDialog):
 
     def _on_search(self) -> None:
         """Launch search thread."""
+        # Guard: prevent multiple simultaneous searches
+        if self._search_thread is not None and self._search_thread.isRunning():
+            return
+            
         keyword = self._search_input.text().strip()
         if not keyword:
             return
