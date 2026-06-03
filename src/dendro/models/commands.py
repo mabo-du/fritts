@@ -128,6 +128,33 @@ class ShiftSeriesCommand(Command):
         return f"Shift '{self._series_id}' {abs(self._offset)} year(s) {direction}"
 
 
+class DetrendCommand(Command):
+    """Store detrended ring-width indices (RWI) on a series.
+
+    Rules:
+        - Stores the detrended indices; undo clears them.
+        - The original ring widths are never modified.
+    """
+
+    def __init__(self, series_id: str, rwi: np.ndarray, method: str) -> None:
+        self._series_id = series_id
+        self._rwi = rwi.copy()
+        self._method = method
+
+    def execute(self, session: SessionManager) -> None:
+        series = session.get_series(self._series_id)
+        updated = series.with_indices(self._rwi)
+        session.replace_series(self._series_id, updated)
+
+    def undo(self, session: SessionManager) -> None:
+        series = session.get_series(self._series_id)
+        updated = series.with_indices(None)
+        session.replace_series(self._series_id, updated)
+
+    def description(self) -> str:
+        return f"Detrend '{self._series_id}' using {self._method}"
+
+
 class CommandStack(QObject):
     """Manages the undo/redo history stack.
 

@@ -34,6 +34,7 @@ from dendro.models.commands import (
     InsertRingCommand,
     DeleteRingCommand,
     ShiftSeriesCommand,
+    DetrendCommand,
 )
 from dendro.ui.series_view import SeriesView
 from dendro.ui.stats_panel import StatsPanel
@@ -600,14 +601,14 @@ class MainWindow(QMainWindow):
                 rcs_results = rcs_detrend(series_list)
                 for sid, rwi in rcs_results.items():
                     self._command_stack.execute(
-                        DetrendCommand(self._session, sid, rwi, method)
+                        DetrendCommand(sid, rwi, method)
                     )
             else:
                 for sid in targets:
                     series = self._session.get_series(sid)
                     rwi = detrend_series(series.widths, method=method, stiffness=stiffness)
                     self._command_stack.execute(
-                        DetrendCommand(self._session, sid, rwi, method)
+                        DetrendCommand(sid, rwi, method)
                     )
             logger.info(f"Detrended {len(targets)} series using {method}.")
             self._statusbar.showMessage(f"Detrended {len(targets)} series.", 5000)
