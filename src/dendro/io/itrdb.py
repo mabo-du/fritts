@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import logging
+import urllib.error
 import urllib.request
 import urllib.parse
 from dataclasses import dataclass
@@ -199,6 +200,12 @@ def search_itrdb(keyword: str, limit: int = 50) -> list[ITRDBStudy]:
                 
             return results
             
+    except urllib.error.HTTPError as e:
+        logger.error("ITRDB API returned HTTP %d: %s", e.code, e.reason)
+        return []
+    except urllib.error.URLError as e:
+        logger.error("ITRDB API connection failed: %s", e.reason)
+        return []
     except Exception as e:
         logger.exception("Failed to query ITRDB API")
         return []
