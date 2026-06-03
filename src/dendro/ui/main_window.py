@@ -599,14 +599,14 @@ class MainWindow(QMainWindow):
                 series_list = [self._session.get_series(sid) for sid in targets]
                 rcs_results = rcs_detrend(series_list)
                 for sid, rwi in rcs_results.items():
-                    self._command_stack.push(
+                    self._command_stack.execute(
                         DetrendCommand(self._session, sid, rwi, method)
                     )
             else:
                 for sid in targets:
                     series = self._session.get_series(sid)
                     rwi = detrend_series(series.widths, method=method, stiffness=stiffness)
-                    self._command_stack.push(
+                    self._command_stack.execute(
                         DetrendCommand(self._session, sid, rwi, method)
                     )
             logger.info(f"Detrended {len(targets)} series using {method}.")

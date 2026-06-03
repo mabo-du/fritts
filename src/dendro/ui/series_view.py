@@ -23,6 +23,13 @@ from PyQt6.QtWidgets import QMenu
 
 from dendro.resources import CVD_SAFE_PALETTE, LINE_STYLES
 
+# Workaround: pyqtgraph 0.13.x PlotWidget.__getattr__ only checks PlotItem,
+# not ViewBox. When PlotDataItem.getViewBox() returns the widget during scene
+# reparenting, view.autoRangeEnabled() crashes because PlotItem lacks the
+# method even though ViewBox has it.
+if not hasattr(pg.PlotItem, "autoRangeEnabled"):
+    pg.PlotItem.autoRangeEnabled = lambda self: self.getViewBox().autoRangeEnabled() if self.getViewBox() else [True, True]
+
 if TYPE_CHECKING:
     from dendro.models.session import SessionManager
 
