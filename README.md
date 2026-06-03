@@ -171,6 +171,16 @@ See [docs/USER_GUIDE.md](docs/USER_GUIDE.md) for comprehensive documentation inc
 - ITRDB data search
 - Interpreting statistical results
 
+## Known Issues
+
+### NOAA ITRDB API limit
+
+The ITRDB search API returns HTTP 500 errors when the `limit` parameter is 46 or higher. Fritts defaults to `limit=30` to avoid this. If you need more results, run multiple searches with different keywords.
+
+### pyqtgraph version
+
+Fritts requires `pyqtgraph>=0.13,<0.14`. Version 0.14 removed a method that pyqtgraph's own internal plotting code still calls, causing `AttributeError` spam on plot interactions. This is pinned in `pyproject.toml`.
+
 ## Target Users
 
 - Dendrochronologists dating archaeological timbers
