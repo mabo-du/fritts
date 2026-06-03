@@ -37,7 +37,7 @@ class ITRDBStudy:
     most_recent_year: int | str
     rwl_url: str | None
 
-def search_itrdb(keyword: str, limit: int = 50) -> list[ITRDBStudy]:
+def search_itrdb(keyword: str, limit: int = 30) -> list[ITRDBStudy]:
     """Search the ITRDB via NOAA API for tree ring data.
     
     Args:

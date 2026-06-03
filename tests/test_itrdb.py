@@ -340,7 +340,7 @@ def test_search_itrdb_api_limit_param(mock_urlopen):
 
 @patch('urllib.request.urlopen')
 def test_search_itrdb_default_limit(mock_urlopen):
-    """Default limit of 50 should be in the API URL."""
+    """Default limit of 30 should be in the API URL (NOAA API fails on >45)."""
     mock_response = MagicMock()
     mock_response.status = 200
     mock_response.read.return_value = json.dumps({"study": []}).encode('utf-8')
@@ -348,4 +348,4 @@ def test_search_itrdb_default_limit(mock_urlopen):
 
     search_itrdb("test")
     call_url = mock_urlopen.call_args[0][0].full_url
-    assert "limit=50" in call_url, f"Expected limit=50 in URL, got: {call_url}"
+    assert "limit=30" in call_url, f"Expected limit=30 in URL, got: {call_url}"
