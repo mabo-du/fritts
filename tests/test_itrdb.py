@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from dendro.io.itrdb import search_itrdb, ITRDBStudy
+from dendro.io.itrdb import search_itrdb, ITRDBStudy, fetch_itrdb_series
 
 @patch('urllib.request.urlopen')
 def test_search_itrdb_success(mock_urlopen):
@@ -17,7 +17,7 @@ def test_search_itrdb_success(mock_urlopen):
             {
                 "xmlId": "1234",
                 "studyName": "Test Study",
-                "investigator": [{"NAME": "Dr. Smith"}],
+                "investigators": "Dr. Smith",
                 "site": {
                     "siteName": "Test Site",
                     "paleoData": {"species": "Quercus alba"}
@@ -66,3 +66,196 @@ def test_search_itrdb_error(mock_urlopen):
 
     results = search_itrdb("oak")
     assert len(results) == 0
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_online_link_string(mock_urlopen):
+    """onlineResourceLink as a plain string (the real NOAA API shape)."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_data = {
+        "study": [
+            {
+                "xmlId": "5678",
+                "studyName": "Oak Study",
+                "investigators": "Dr. Jones",
+                "site": {
+                    "siteName": "Oak Forest",
+                    "paleoData": {"species": "Quercus"}
+                },
+                "earliestYear": 1500,
+                "mostRecentYear": 2000,
+                "onlineResourceLink": "https://example.com/data.rwl"
+            }
+        ]
+    }
+    mock_response.read.return_value = json.dumps(mock_data).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    results = search_itrdb("oak")
+    assert len(results) == 1
+    assert results[0].rwl_url == "https://example.com/data.rwl"
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_online_link_string_no_rwl(mock_urlopen):
+    """onlineResourceLink as a plain string that isn't .rwl — should not crash."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_data = {
+        "study": [
+            {
+                "xmlId": "9999",
+                "studyName": "Climate Study",
+                "investigators": "Dr. X",
+                "site": {
+                    "siteName": "Some Site",
+                    "paleoData": {"species": "Pinus"}
+                },
+                "earliestYear": 1800,
+                "mostRecentYear": 2000,
+                "onlineResourceLink": "https://www.ncei.noaa.gov/access/paleo-search/study/9999"
+            }
+        ]
+    }
+    mock_response.read.return_value = json.dumps(mock_data).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    results = search_itrdb("pine")
+    assert len(results) == 1
+    assert results[0].rwl_url is None
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_data_file_rwl(mock_urlopen):
+    """.rwl URL found in site.paleoData.dataFile.fileUrl fallback."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_data = {
+        "study": [
+            {
+                "xmlId": "4444",
+                "studyName": "Tree Ring Study",
+                "investigators": "Dr. Tree",
+                "site": [{
+                    "siteName": "Forest",
+                    "paleoData": [{
+                        "species": "Picea",
+                        "dataFile": [
+                            {"fileUrl": "https://example.com/study.rwl", "urlDescription": "RWL File"},
+                            {"fileUrl": "https://example.com/notes.txt", "urlDescription": "Notes"}
+                        ]
+                    }]
+                }],
+                "earliestYear": 1700,
+                "mostRecentYear": 2000,
+                "onlineResourceLink": "https://www.ncei.noaa.gov/access/paleo-search/study/4444"
+            }
+        ]
+    }
+    mock_response.read.return_value = json.dumps(mock_data).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    results = search_itrdb("spruce")
+    assert len(results) == 1
+    assert results[0].rwl_url == "https://example.com/study.rwl"
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_no_rwl_anywhere(mock_urlopen):
+    """No .rwl URL found anywhere — should return None, not crash."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_data = {
+        "study": [
+            {
+                "xmlId": "5555",
+                "studyName": "No RWL Study",
+                "investigators": "Dr. None",
+                "site": {
+                    "siteName": "Empty",
+                    "paleoData": {"species": "Unknown"}
+                },
+                "earliestYear": 1900,
+                "mostRecentYear": 2000,
+                "onlineResourceLink": "https://example.com/study-page"
+            }
+        ]
+    }
+    mock_response.read.return_value = json.dumps(mock_data).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    results = search_itrdb("nothing")
+    assert len(results) == 1
+    assert results[0].rwl_url is None
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_missing_online_link(mock_urlopen):
+    """No onlineResourceLink key at all — should not crash."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_data = {
+        "study": [
+            {
+                "xmlId": "6666",
+                "studyName": "No Links",
+                "investigators": "Dr. Missing",
+                "site": {"siteName": "Nowhere"},
+                "earliestYear": 1900,
+                "mostRecentYear": 2000
+            }
+        ]
+    }
+    mock_response.read.return_value = json.dumps(mock_data).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    results = search_itrdb("missing")
+    assert len(results) == 1
+    assert results[0].rwl_url is None
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_investigator_details(mock_urlopen):
+    """investigatorDetails array fallback (real API format)."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_data = {
+        "study": [
+            {
+                "xmlId": "7777",
+                "studyName": "Details Study",
+                "investigatorDetails": [
+                    {"firstName": "Jane", "lastName": "Doe"},
+                    {"firstName": "John", "lastName": "Smith"}
+                ],
+                "site": {"siteName": "Forest"},
+                "earliestYear": 1600,
+                "mostRecentYear": 2000,
+                "onlineResourceLink": "https://example.com/study-page"
+            }
+        ]
+    }
+    mock_response.read.return_value = json.dumps(mock_data).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    results = search_itrdb("details")
+    assert len(results) == 1
+    assert results[0].investigators == "Jane Doe, John Smith"
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_missing_investigators(mock_urlopen):
+    """No investigator data at all — should return Unknown, not crash."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_data = {
+        "study": [
+            {
+                "xmlId": "8888",
+                "studyName": "No Investigator",
+                "site": {"siteName": "Void"},
+                "earliestYear": 1900,
+                "mostRecentYear": 2000
+            }
+        ]
+    }
+    mock_response.read.return_value = json.dumps(mock_data).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    results = search_itrdb("unknown")
+    assert len(results) == 1
+    assert results[0].investigators == "Unknown"

@@ -55,8 +55,16 @@ cover/
 # macOS
 .DS_Store
 
+# Linters and type checkers
+.mypy_cache/
+.ruff_cache/
+
+# Code intelligence indexes
+.gitnexus/
+
 # Project specific
 logs/
+*.log
 *.rwl
 *.tuc
 *.crn

@@ -59,7 +59,7 @@ def search_itrdb(keyword: str, limit: int = 50) -> list[ITRDBStudy]:
     
     req = urllib.request.Request(
         url, 
-        headers={"User-Agent": "Dendrochronology-Analysis-Platform/2.0"}
+        headers={"User-Agent": "Fritts/3.0"}
     )
     
     try:
@@ -81,15 +81,26 @@ def search_itrdb(keyword: str, limit: int = 50) -> list[ITRDBStudy]:
                 s_id = str(study.get("xmlId", ""))
                 s_name = study.get("studyName", "Unknown Study")
                 
-                # Investigators
-                inv_data = study.get("investigator", [])
-                if isinstance(inv_data, list):
-                    inv_names = [i.get("NAME", "Unknown") for i in inv_data if isinstance(i, dict)]
-                elif isinstance(inv_data, dict):
-                    inv_names = [inv_data.get("NAME", "Unknown")]
+                # Investigators — the real API returns a comma-separated string
+                # ("investigators") or an array of detail objects ("investigatorDetails"),
+                # not the "investigator" array of {NAME} dicts the original code expected.
+                inv_raw = study.get("investigators")
+                if isinstance(inv_raw, str) and inv_raw.strip():
+                    investigators = inv_raw.strip()
                 else:
-                    inv_names = ["Unknown"]
-                investigators = ", ".join(inv_names)
+                    inv_details = study.get("investigatorDetails", [])
+                    if isinstance(inv_details, list):
+                        inv_names = []
+                        for p in inv_details:
+                            if isinstance(p, dict):
+                                first = p.get("firstName", "")
+                                last = p.get("lastName", "")
+                                name = f"{first} {last}".strip()
+                                if name:
+                                    inv_names.append(name)
+                        investigators = ", ".join(inv_names) if inv_names else "Unknown"
+                    else:
+                        investigators = "Unknown"
                 
                 # Site and Species from site list
                 sites = study.get("site", [])
@@ -118,14 +129,42 @@ def search_itrdb(keyword: str, limit: int = 50) -> list[ITRDBStudy]:
                 # Try to find an .rwl download link
                 rwl_url = None
                 online_links = study.get("onlineResourceLink", [])
-                if isinstance(online_links, dict):
+                if isinstance(online_links, str):
+                    if online_links.lower().endswith(".rwl"):
+                        rwl_url = online_links
+                elif isinstance(online_links, dict):
                     online_links = [online_links]
-                    
-                for link in online_links:
-                    url_str = link.get("URL", "")
-                    if url_str.lower().endswith(".rwl"):
-                        rwl_url = url_str
-                        break
+
+                if rwl_url is None and isinstance(online_links, list):
+                    for link in online_links:
+                        if isinstance(link, dict):
+                            url_str = link.get("URL", "")
+                        elif isinstance(link, str):
+                            url_str = link
+                        else:
+                            continue
+                        if url_str.lower().endswith(".rwl"):
+                            rwl_url = url_str
+                            break
+
+                # Fallback: scan dataFile entries inside site.paleoData for .rwl URLs
+                if rwl_url is None and isinstance(sites, list):
+                    for site_entry in sites:
+                        paleo_data = site_entry.get("paleoData", []) if isinstance(site_entry, dict) else []
+                        if isinstance(paleo_data, dict):
+                            paleo_data = [paleo_data]
+                        for pd_entry in paleo_data:
+                            if not isinstance(pd_entry, dict):
+                                continue
+                            for df in pd_entry.get("dataFile", []):
+                                f_url = df.get("fileUrl", "") if isinstance(df, dict) else ""
+                                if f_url.lower().endswith(".rwl"):
+                                    rwl_url = f_url
+                                    break
+                            if rwl_url:
+                                break
+                        if rwl_url:
+                            break
                         
                 results.append(ITRDBStudy(
                     study_id=s_id,
@@ -157,7 +196,7 @@ def fetch_itrdb_series(url: str) -> list[RingWidthSeries]:
     
     req = urllib.request.Request(
         url, 
-        headers={"User-Agent": "Dendrochronology-Analysis-Platform/2.0"}
+        headers={"User-Agent": "Fritts/3.0"}
     )
     
     import tempfile
