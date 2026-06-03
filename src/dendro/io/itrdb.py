@@ -46,10 +46,11 @@ def search_itrdb(keyword: str, limit: int = 50) -> list[ITRDBStudy]:
     Returns:
         A list of parsed ITRDBStudy objects.
     """
-    params = {
+    params: dict[str, str] = {
         "dataPublisher": "NOAA",
         "dataTypeId": "18",  # 18 = Tree Ring
         "searchAll": keyword,
+        "limit": str(limit),  # Tell the API to limit results server-side
     }
     
     query_string = urllib.parse.urlencode(params)
@@ -120,11 +121,30 @@ def search_itrdb(keyword: str, limit: int = 50) -> list[ITRDBStudy]:
                     
                     if paleo_data:
                         first_data = paleo_data[0]
-                        species = first_data.get("species", "Unknown")
+                        raw_species = first_data.get("species", "Unknown")
+                        if isinstance(raw_species, list):
+                            # API returns array of {scientificName, speciesCode, ...}
+                            names = []
+                            for s in raw_species:
+                                if isinstance(s, dict):
+                                    name = s.get("scientificName") or s.get("commonName")
+                                    if isinstance(name, list):
+                                        name = name[0] if name else ""
+                                    if name:
+                                        names.append(name)
+                                elif isinstance(s, str):
+                                    names.append(s)
+                            species = "; ".join(names) if names else "Unknown"
+                        elif isinstance(raw_species, str):
+                            species = raw_species if raw_species else "Unknown"
                         
-                # Time bounding
-                earliest = study.get("earliestYear", "Unknown")
-                latest = study.get("mostRecentYear", "Unknown")
+                # Time bounding — API may return CE-dated fields
+                earliest = study.get("earliestYear")
+                if earliest is None:
+                    earliest = study.get("earliestYearCE", "Unknown")
+                latest = study.get("mostRecentYear")
+                if latest is None:
+                    latest = study.get("mostRecentYearCE", "Unknown")
                 
                 # Try to find an .rwl download link
                 rwl_url = None

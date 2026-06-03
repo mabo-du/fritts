@@ -259,3 +259,93 @@ def test_search_itrdb_missing_investigators(mock_urlopen):
     results = search_itrdb("unknown")
     assert len(results) == 1
     assert results[0].investigators == "Unknown"
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_ce_year_fields(mock_urlopen):
+    """API uses earliestYearCE/mostRecentYearCE instead of earliestYear/mostRecentYear."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_data = {
+        "study": [
+            {
+                "xmlId": "9012",
+                "studyName": "CE Years Study",
+                "investigators": "Dr. CE",
+                "site": {"siteName": "Old Site"},
+                "earliestYearCE": 900,
+                "mostRecentYearCE": 2002,
+                "onlineResourceLink": "https://example.com/page"
+            }
+        ]
+    }
+    mock_response.read.return_value = json.dumps(mock_data).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    results = search_itrdb("ce_test")
+    assert len(results) == 1
+    assert results[0].earliest_year == 900
+    assert results[0].most_recent_year == 2002
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_species_array(mock_urlopen):
+    """Species as array of {scientificName, speciesCode} objects."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_data = {
+        "study": [
+            {
+                "xmlId": "1011",
+                "studyName": "Species Array Study",
+                "investigators": "Dr. Species",
+                "site": {
+                    "siteName": "Forest",
+                    "paleoData": {
+                        "species": [
+                            {"speciesCode": "QUST", "scientificName": "Quercus stellata"},
+                            {"speciesCode": "QUAL", "scientificName": "Quercus alba"}
+                        ]
+                    }
+                },
+                "earliestYear": 1700,
+                "mostRecentYear": 2000,
+                "onlineResourceLink": "https://example.com/page"
+            }
+        ]
+    }
+    mock_response.read.return_value = json.dumps(mock_data).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    results = search_itrdb("species_test")
+    assert len(results) == 1
+    assert "Quercus stellata" in results[0].species
+    assert "Quercus alba" in results[0].species
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_api_limit_param(mock_urlopen):
+    """Verify the API limit parameter is passed in the request URL."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_response.read.return_value = json.dumps({"study": []}).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    search_itrdb("test", limit=10)
+
+    # Check that the URL contains limit=10
+    call_url = mock_urlopen.call_args[0][0].full_url
+    assert "limit=10" in call_url, f"Expected limit=10 in URL, got: {call_url}"
+
+    search_itrdb("test", limit=25)
+    call_url2 = mock_urlopen.call_args[0][0].full_url
+    assert "limit=25" in call_url2, f"Expected limit=25 in URL, got: {call_url2}"
+
+@patch('urllib.request.urlopen')
+def test_search_itrdb_default_limit(mock_urlopen):
+    """Default limit of 50 should be in the API URL."""
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_response.read.return_value = json.dumps({"study": []}).encode('utf-8')
+    mock_urlopen.return_value.__enter__.return_value = mock_response
+
+    search_itrdb("test")
+    call_url = mock_urlopen.call_args[0][0].full_url
+    assert "limit=50" in call_url, f"Expected limit=50 in URL, got: {call_url}"
