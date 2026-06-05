@@ -73,3 +73,20 @@ logs/
 !tests/**/*.xml
 !tests/**/*.rwl
 !tests/**/*.fh
+.gitnexus
+
+# AI Agent / IDE config files — personal, not part of the project
+.agents/
+.aidevops.json
+.beads/
+.claude/
+.ctx/
+.windsurf/
+AGENTS.md
+CLAUDE.md
+TODO.md
+migrations/
+schemas/
+seeds/
+todo/
+.gitattributes

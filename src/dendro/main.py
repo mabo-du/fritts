@@ -1,4 +1,4 @@
-"""main.py — Application entry point for the Dendro platform.
+"""main.py — Application entry point for the Fritts platform.
 
 exports: main()
 used_by: pyproject.toml → [project.scripts] dendro = dendro.main:main
@@ -20,15 +20,13 @@ logging.basicConfig(
 
 
 def main() -> None:
-    """Launch the Dendro application."""
+    """Launch the Fritts application."""
     from PyQt6.QtWidgets import QApplication
-    from PyQt6.QtCore import Qt
-    from PyQt6.QtGui import QIcon
 
     app = QApplication(sys.argv)
-    app.setApplicationName("Dendro")
-    app.setApplicationDisplayName("Dendro — Dendrochronology Analysis Platform")
-    app.setOrganizationName("Dendro")
+    app.setApplicationName("Fritts")
+    app.setApplicationDisplayName("Fritts — Dendrochronology Analysis Platform")
+    app.setOrganizationName("Fritts")
     app.setApplicationVersion("0.1.0")
 
     # Apply dark fusion style for a modern look
@@ -43,7 +41,7 @@ def main() -> None:
     sys.exit(app.exec())
 
 
-def _apply_dark_palette(app: "QApplication") -> None:
+def _apply_dark_palette(app: "QApplication") -> None:  # noqa: F821
     """Apply a dark colour palette for a modern scientific aesthetic.
 
     Rules:
@@ -58,7 +56,7 @@ def _apply_dark_palette(app: "QApplication") -> None:
     dark = QColor(30, 30, 30)
     mid_dark = QColor(45, 45, 48)
     mid = QColor(60, 63, 65)
-    light_mid = QColor(75, 78, 80)
+    QColor(75, 78, 80)
     text_color = QColor(212, 212, 212)
     highlight = QColor(0, 114, 178)  # CVD-safe blue
     disabled_text = QColor(128, 128, 128)

@@ -19,7 +19,7 @@ try:
     import torch
     import torch.nn as nn
     import torch.nn.functional as F
-    import torchvision.transforms.functional as TF
+    import torchvision.transforms.functional as TF  # noqa: F401
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -184,6 +184,6 @@ def extract_boundaries(image: np.ndarray, model_path: str | None = None) -> list
         # Note: real implementation would use sliding window inference.
         return _detect_boundaries_proxy(image)
         
-    except Exception as e:
+    except Exception:
         logger.exception("Inference failed")
         return []

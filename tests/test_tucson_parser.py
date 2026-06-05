@@ -1,5 +1,4 @@
 import numpy as np
-import pytest
 from dendro.io.tucson import read_tucson, write_tucson
 from dendro.models.series import RingWidthSeries
 

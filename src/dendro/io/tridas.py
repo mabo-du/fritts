@@ -106,7 +106,7 @@ def write_tridas(series_list: list[RingWidthSeries], filepath: str | Path) -> No
     project = etree.SubElement(root, f"{{{NS}}}project")
     
     title = etree.SubElement(project, f"{{{NS}}}title")
-    title.text = "Dendrochronology Platform Export"
+    title.text = "Fritts Export"
     
     obj = etree.SubElement(project, f"{{{NS}}}object")
     obj_title = etree.SubElement(obj, f"{{{NS}}}title")

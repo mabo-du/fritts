@@ -281,7 +281,7 @@ def crossdate_sliding(
     s_arr = sample.widths
     r_arr = reference.widths
     s_len = len(s_arr)
-    r_len = len(r_arr)
+    len(r_arr)
 
     # The proposed start_year range for the sample:
     # earliest: reference.start_year - s_len + min_overlap
@@ -331,7 +331,7 @@ def crossdate_sliding(
         )
 
     # Build index from the proposed start years that actually made it
-    start_years = list(
+    list(
         range(earliest_start, latest_start + 1)
     )
     # We need only the years that produced rows — re-derive from the loop

@@ -19,13 +19,18 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon-x11-0
+
       - name: Install dependencies
         run: |
           pip install -e ".[dev]"
 
       - name: Lint
         run: |
-          ruff check dendro/ tests/
+          ruff check src/dendro/ tests/
 
       - name: Test
         run: |

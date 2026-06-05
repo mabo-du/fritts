@@ -20,7 +20,7 @@ CVD_SAFE_PALETTE = [
 ]
 
 # Line styles to combine with colours for additional differentiation.
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt  # noqa: E402
 
 LINE_STYLES = [
     Qt.PenStyle.SolidLine,

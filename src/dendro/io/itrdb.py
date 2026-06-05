@@ -15,7 +15,6 @@ import urllib.error
 import urllib.request
 import urllib.parse
 from dataclasses import dataclass
-from typing import Any
 
 from dendro.models.series import RingWidthSeries
 from dendro.io.tucson import read_tucson
@@ -206,7 +205,7 @@ def search_itrdb(keyword: str, limit: int = 30) -> list[ITRDBStudy]:
     except urllib.error.URLError as e:
         logger.error("ITRDB API connection failed: %s", e.reason)
         return []
-    except Exception as e:
+    except Exception:
         logger.exception("Failed to query ITRDB API")
         return []
 

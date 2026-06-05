@@ -23,13 +23,11 @@ from PyQt6.QtWidgets import (
     QFileDialog,
     QFormLayout,
     QGroupBox,
-    QHBoxLayout,
     QLabel,
     QComboBox,
     QSpinBox,
     QTextBrowser,
     QVBoxLayout,
-    QWidget,
 )
 
 if TYPE_CHECKING:
@@ -269,12 +267,12 @@ class AboutDialog(QDialog):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setWindowTitle("About Dendro")
-        self.setFixedSize(420, 300)
+        self.setWindowTitle("About Fritts")
+        self.setFixedSize(500, 380)
 
         layout = QVBoxLayout(self)
 
-        title = QLabel("Dendro")
+        title = QLabel("Fritts")
         title.setFont(QFont("Inter", 20, QFont.Weight.Bold))
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet("color: #0072B2;")
@@ -297,6 +295,10 @@ class AboutDialog(QDialog):
             "<p style='color:#d4d4d4; text-align:center;'>"
             "An open-source desktop tool for tree-ring cross-dating,<br>"
             "measurement, and master chronology building.</p>"
+            "<p style='color:#0072B2; text-align:center; font-style:italic;'>"
+            "Named in honor of Dr. Harold C. \"Hal\" Fritts (1928–2019),<br>"
+            "a pioneer of dendroclimatology who laid the computational<br>"
+            "foundation for modern tree-ring science.</p>"
             "<p style='color:#888; text-align:center;'>License: MIT</p>"
             "<p style='color:#888; text-align:center;'>"
             "Built with PyQt6, PyQtGraph, NumPy, SciPy, and Pandas.</p>"

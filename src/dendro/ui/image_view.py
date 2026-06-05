@@ -14,7 +14,7 @@ import logging
 import numpy as np
 import pyqtgraph as pg
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QColor, QFont, QImage
+from PyQt6.QtGui import QImage
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,

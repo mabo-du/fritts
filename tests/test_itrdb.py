@@ -1,10 +1,8 @@
 import json
-import urllib.request
 from unittest.mock import patch, MagicMock
 
-import pytest
 
-from dendro.io.itrdb import search_itrdb, ITRDBStudy, fetch_itrdb_series
+from dendro.io.itrdb import search_itrdb
 
 @patch('urllib.request.urlopen')
 def test_search_itrdb_success(mock_urlopen):

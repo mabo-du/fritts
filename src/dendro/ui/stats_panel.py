@@ -22,7 +22,6 @@ from PyQt6.QtGui import QFont, QColor
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    QHBoxLayout,
     QSplitter,
     QTableWidget,
     QTableWidgetItem,
@@ -31,7 +30,7 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
-    from dendro.models.session import SessionManager
+    pass
 
 logger = logging.getLogger(__name__)
 

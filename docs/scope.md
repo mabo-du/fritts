@@ -1,4 +1,4 @@
-# PROJECT — Dendrochronology-Analysis-Platform
+# PROJECT — Fritts
 
 ## Overview
 An open-source desktop tool for tree-ring cross-dating, measurement, and master chronology building. Existing software is often dated, proprietary, or lacks a modern visual interface.

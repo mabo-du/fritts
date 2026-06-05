@@ -17,7 +17,6 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QDialogButtonBox,
     QSpinBox,
-    QMessageBox,
 )
 
 class DetrendDialog(QDialog):

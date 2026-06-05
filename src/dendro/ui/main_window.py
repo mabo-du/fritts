@@ -53,7 +53,7 @@ logger = logging.getLogger(__name__)
 
 
 class MainWindow(QMainWindow):
-    """Main application window for the Dendro platform.
+    """Main application window for the Fritts platform.
 
     Layout:
         ┌──────────┬────────────────────────────────┐
@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self) -> None:
         super().__init__()
-        self.setWindowTitle("Dendro — Dendrochronology Analysis Platform")
+        self.setWindowTitle("Fritts — Dendrochronology Analysis Platform")
         self.setMinimumSize(1200, 700)
         self.resize(1440, 900)
 
@@ -245,7 +245,7 @@ class MainWindow(QMainWindow):
 
         # Help menu
         help_menu = menu_bar.addMenu("&Help")
-        about_action = QAction("&About Dendro", self)
+        about_action = QAction("&About Fritts", self)
         about_action.triggered.connect(lambda: AboutDialog(self).exec())
         help_menu.addAction(about_action)
 
@@ -708,7 +708,7 @@ class MainWindow(QMainWindow):
             
             logger.info("Auto-crossdated %s vs %s", series_id, reference.series_id)
             self._statusbar.showMessage(f"Auto-crossdated {series_id} vs {reference.series_id}", 3000)
-        except Exception as e:
+        except Exception:
             logger.exception("Auto-crossdating failed")
 
     def _action_snap_to_offset(self, proposed_start_year: int) -> None:
