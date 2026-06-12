@@ -471,4 +471,4 @@ sudo dnf install qt6-qtbase-gui
 
 ---
 
-*Fritts v3.0 — Named in honor of Harold C. Fritts (1930–2024), pioneer of dendroclimatology.*
+*Fritts — Named in honor of Harold C. Fritts (1930–2024), pioneer of dendroclimatology.*

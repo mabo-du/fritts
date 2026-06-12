@@ -11,6 +11,7 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import UnivariateSpline
 from typing import TYPE_CHECKING
 import logging
+import warnings
 
 if TYPE_CHECKING:
     from dendro.models.series import RingWidthSeries
@@ -170,8 +171,8 @@ def rcs_detrend(series_list: list['RingWidthSeries']) -> dict[str, np.ndarray]:
         
     # 3. Calculate the Regional Curve (RC)
     # Using robust mean (or median) to resist outliers
-    with np.warnings.catch_warnings():
-        np.warnings.simplefilter("ignore", category=RuntimeWarning)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
         rc = np.nanmedian(aligned, axis=1)
         
     # Optional: smooth the RC slightly to remove inter-annual noise

@@ -11,6 +11,7 @@ rules:
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -69,8 +70,8 @@ def run_cofecha_check(
         # Leave-one-out Master Chronology
         # Average all OTHER series
         other_data = np.delete(data, i, axis=0)
-        with np.warnings.catch_warnings():
-            np.warnings.simplefilter("ignore", category=RuntimeWarning)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
             master_curve = np.nanmean(other_data, axis=0)
             
         # Sliding windows
