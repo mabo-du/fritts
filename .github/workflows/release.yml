@@ -83,6 +83,7 @@ jobs:
           pip install -e .
 
       - name: Build standalone executable
+        shell: bash
         run: |
           pyinstaller --onefile --name fritts src/dendro/main.py \
             --hidden-import PyQt6 \
@@ -93,7 +94,7 @@ jobs:
       - name: Build AppImage (Linux)
         if: runner.os == 'Linux'
         run: |
-          wget "https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage"
+          wget -qO appimagetool-x86_64.AppImage "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
           chmod +x appimagetool-x86_64.AppImage
           mkdir -p AppDir/usr/bin
           cp dist/fritts AppDir/usr/bin/
@@ -112,7 +113,8 @@ jobs:
           exec "${HERE}/usr/bin/fritts" "$@"
           EOF
           chmod +x AppDir/AppRun
-          ./appimagetool-x86_64.AppImage --appimage-extract-and-run AppDir dist/Fritts-x86_64.AppImage
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          ./appimagetool-x86_64.AppImage AppDir dist/Fritts-x86_64.AppImage
 
       - name: Upload desktop artifact
         uses: actions/upload-artifact@v4
