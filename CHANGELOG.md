@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.4] - Unreleased
+## [0.1.5] - Unreleased
+
+### Fixed
+- Fixed an issue where `pip install -e .` overrode the CPU version of PyTorch with the CUDA version on GitHub Actions, leading to standalone binaries exceeding GitHub's 2GB file size limit. Added a constraints file to force pip to honor the pre-installed CPU-only PyTorch wheel.
+
+## [0.1.4] - 2026-06-12
 
 ### Fixed
 - Changed PyInstaller builds to bundle CPU-only PyTorch to avoid exceeding the 2GB GitHub Release file size limit, which previously caused the release workflow to fail.
