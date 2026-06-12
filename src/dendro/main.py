@@ -27,7 +27,7 @@ def main() -> None:
     app.setApplicationName("Fritts")
     app.setApplicationDisplayName("Fritts — Dendrochronology Analysis Platform")
     app.setOrganizationName("Fritts")
-    app.setApplicationVersion("0.1.2")
+    app.setApplicationVersion("0.1.3")
 
     # Apply dark fusion style for a modern look
     app.setStyle("Fusion")

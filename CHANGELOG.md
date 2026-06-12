@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.2] - Unreleased
+## [0.1.3] - Unreleased
+
+### Changed
+- Renamed PyPI package to `fritts-dendro`.
+
+## [0.1.2] - 2026-06-12
 
 ### Fixed
 - Replaced deprecated `np.warnings` usage with standard Python `warnings` in the `detrend` and `quality_control` statistics modules. This fixes a fatal `AttributeError` crash encountered when running cross-dating or standardisation on NumPy 1.24 or newer.
